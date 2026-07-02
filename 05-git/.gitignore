@@ -1,0 +1,5 @@
+# Forgejo Data
+data/
+
+# Environment Variables
+.env
