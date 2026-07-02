@@ -1,0 +1,6 @@
+# AI Stack Data
+data/
+searxng/
+
+# Environment Variables
+.env
