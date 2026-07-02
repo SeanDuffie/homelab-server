@@ -1,0 +1,65 @@
+services:
+  conduit:
+    image: matrixconduit/matrix-conduit:latest
+    container_name: matrix-conduit
+    restart: unless-stopped
+    environment:
+      CONDUIT_CONFIG: ""
+      CONDUIT_SERVER_NAME: "matrix.seanduffie.com"
+      CONDUIT_PORT: "6167"
+      CONDUIT_ADDRESS: "0.0.0.0"
+      CONDUIT_DATABASE_BACKEND: "sqlite"
+      CONDUIT_DATABASE_PATH: "/var/lib/matrix-conduit"
+      CONDUIT_ALLOW_REGISTRATION: "true"
+      CONDUIT_REGISTRATION_TOKEN: "${CONDUIT_REGISTRATION_TOKEN}"
+      CONDUIT_ALLOW_FEDERATION: "true" # Keeps your server private for now
+    volumes:
+      - ./data/conduit:/var/lib/matrix-conduit
+    networks:
+    - homelab-proxy
+
+  # element-web:
+  #   image: vectorim/element-web:latest
+  #   container_name: element-web
+  #   restart: unless-stopped
+  #   networks:
+  #   - homelab-proxy
+  #   volumes:
+  #   - ./etc/config.json:/app/config.json
+
+  cinny:
+    image: ghcr.io/cinnyapp/cinny:latest
+    container_name: cinny
+    restart: unless-stopped
+    networks:
+      - homelab-proxy
+
+  lk-jwt-service:
+    image: ghcr.io/element-hq/lk-jwt-service:latest
+    container_name: lk-jwt-service
+    restart: unless-stopped
+    environment:
+      LIVEKIT_JWT_BIND: 8080
+      LIVEKIT_URL: ${LIVEKIT_URL}
+      LIVEKIT_KEY: ${LIVEKIT_KEY}
+      LIVEKIT_SECRET: ${LIVEKIT_SECRET}
+      LIVEKIT_FULL_ACCESS_HOMESERVERS: ${LIVEKIT_FULL_ACCESS_HOMESERVERS}
+    networks:
+      - homelab-proxy
+
+  livekit:
+    image: livekit/livekit-server:latest
+    container_name: livekit
+    restart: unless-stopped
+    command: --config /etc/livekit.yaml
+    ports:
+      - "7880:7880"
+      - "50100-50200:50100-50200/udp"
+    volumes:
+      - ./etc/livekit.yaml:/etc/livekit.yaml
+    networks:
+      - homelab-proxy
+
+networks:
+  homelab-proxy:
+    external: true
