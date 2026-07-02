@@ -1,0 +1,44 @@
+services:
+  nginx-proxy-manager:
+    image: jc21/nginx-proxy-manager:latest
+    container_name: nginx-proxy-manager
+    restart: unless-stopped
+    ports:
+      - "80:80"     # HTTP Ingress
+      - "443:443"   # HTTPS Ingress
+      - "81:81"     # Admin Web GUI
+    volumes:
+      - ./data:/data
+      - ./letsencrypt:/etc/letsencrypt
+    networks:
+    - homelab-proxy
+
+  # ddclient:
+  #   image: lscr.io/linuxserver/ddclient:latest
+  #   container_name: ddclient
+  #   restart: unless-stopped
+  #   environment:
+  #     - PUID=1000
+  #     - PGID=1000
+  #     - TZ=${TZ}
+  #   volumes:
+  #     - ./ddclient:/config
+
+  # tailscale:
+  #     image: tailscale/tailscale:latest
+  #     container_name: tailscale
+  #     restart: unless-stopped
+  #     hostname: proxmox-router # How it will appear in your Tailscale admin panel
+  #     environment:
+  #       - TS_AUTHKEY=${TS_AUTHKEY}
+  #       - TS_STATE_DIR=/var/lib/tailscale
+  #     volumes:
+  #       - ./tailscale-data:/var/lib/tailscale
+  #       - /dev/net/tun:/dev/net/tun # Required for VPN tunneling
+  #     cap_add:
+  #       - net_admin # Grants Tailscale permission to modify routing tables
+  #       - sys_module
+
+networks:
+  homelab-proxy:
+    external: true
