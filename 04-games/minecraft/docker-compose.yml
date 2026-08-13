@@ -1,0 +1,22 @@
+# master-compose.yml
+services:
+  minecraft-router:
+    image: itzg/mc-router
+    user: root
+    environment:
+      IN_DOCKER: "true"
+      # Global auto-scaling settings
+      AUTO_SCALE_UP: "true"
+      AUTO_SCALE_DOWN: "true"
+      AUTO_SCALE_DOWN_AFTER: "2h" # Puts servers to sleep after 2 hours empty
+    ports:
+      - "25565:25565"
+      - "19132:19132/udp"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - mc-network
+
+networks:
+  mc-network:
+    name: mc-network

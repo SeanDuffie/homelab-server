@@ -1,0 +1,45 @@
+services:
+  minecraft-paper-server:
+    image: itzg/minecraft-server
+    restart: unless-stopped
+    environment:
+      EULA: "TRUE"
+      TYPE: "${SERVER_TYPE}"
+      VERSION: "26.1.2"
+      PLUGINS: "https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot,https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/spigot"
+      MODRINTH_PROJECTS: "viaversion,discordsrv,essentialsx"
+      MODRINTH_ALLOWED_VERSION_TYPE: "beta"
+      MEMORY: "4G"
+      MOTD: "${MOTD}"
+      SIMULATION_DISTANCE: 16
+      OPS: "${OPS}"
+      ENABLE_RCON: "true"
+      RCON_PASSWORD: "${RCON_PASSWORD}"
+    env_file:
+      - .env
+    volumes:
+      - ./data/world:/data
+      - ./config:/config
+    labels:
+    - "mc-router.host=${SERVER_URL}"
+    networks:
+      - mc-network
+
+  mc-paper-backup:
+    image: itzg/mc-backup
+    depends_on:
+      - minecraft-paper-server
+    environment:
+      RCON_HOST: "minecraft-paper-server"
+      RCON_PASSWORD: "${RCON_PASSWORD}"
+      BACKUP_INTERVAL: "1h"
+      PRUNE_BACKUPS_DAYS: 7
+    volumes:
+      - ./data:/data:ro
+      - ./backups:/backups
+    networks:
+      - mc-network
+
+networks:
+  mc-network:
+    name: mc-network

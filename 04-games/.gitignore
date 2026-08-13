@@ -1,0 +1,6 @@
+# Minecraft Data
+data/
+backups/
+
+# Environment Variables
+.env

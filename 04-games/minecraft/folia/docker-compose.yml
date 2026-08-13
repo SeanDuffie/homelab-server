@@ -1,0 +1,43 @@
+services:
+  minecraft-folia-server:
+    image: itzg/minecraft-server
+    restart: unless-stopped
+    environment:
+      EULA: "TRUE"
+      TYPE: "${SERVER_TYPE}"
+      VERSION: "26.1.2"
+      # TODO: Add Plugins here
+      MEMORY: "4G"
+      MOTD: "${MOTD}"
+      SIMULATION_DISTANCE: 16
+      OPS: "${OPS}"
+      ENABLE_RCON: "true"
+      RCON_PASSWORD: "${RCON_PASSWORD}"
+    env_file:
+      - .env
+    volumes:
+      - ./data/world:/data
+      - ./config:/config
+    labels:
+    - "mc-router.host=${SERVER_URL}"
+    networks:
+      - mc-network
+
+  mc-folia-backup:
+    image: itzg/mc-backup
+    depends_on:
+      - minecraft-folia-server
+    environment:
+      RCON_HOST: "minecraft-folia-server"
+      RCON_PASSWORD: "${RCON_PASSWORD}"
+      BACKUP_INTERVAL: "1h"
+      PRUNE_BACKUPS_DAYS: 7
+    volumes:
+      - ./data:/data:ro
+      - ./backups:/backups
+    networks:
+      - mc-network
+
+networks:
+  mc-network:
+    name: mc-network
