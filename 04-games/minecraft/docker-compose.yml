@@ -2,20 +2,31 @@
 services:
   minecraft-router:
     image: itzg/mc-router
+    restart: unless-stopped
+
+    tty: true
+    stdin_open: true
+
     user: root
     environment:
       IN_DOCKER: "true"
       # Global auto-scaling settings
       AUTO_SCALE_UP: "true"
-      AUTO_SCALE_DOWN: "true"
-      AUTO_SCALE_DOWN_AFTER: "2h" # Puts servers to sleep after 2 hours empty
+      AUTO_SCALE_DOWN: "false"
+      # AUTO_SCALE_DOWN_AFTER: "2h" # Puts servers to sleep after 2 hours empty
+      SLEEPING_MOTD: "Server is sleeping. Join to wake it up (If it times out, try again)."
+      # CLIENTS_TO_DENY: ""
+
     ports:
       - "25565:25565"
       - "19132:19132/udp"
+
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
+
     networks:
       - mc-network
+
 
 networks:
   mc-network:

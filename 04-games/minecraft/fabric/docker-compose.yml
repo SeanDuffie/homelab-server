@@ -1,5 +1,5 @@
 services:
-  minecraft-folia-server:
+  minecraft-fabric-server:
     image: itzg/minecraft-server
     restart: unless-stopped
 
@@ -9,12 +9,14 @@ services:
     environment:
       EULA: "TRUE"
       TYPE: "${SERVER_TYPE}"
-      VERSION: "26.1.2"
+      VERSION: "26.2"
       # SEED: ""
       MEMORY: "4G"
       SIMULATION_DISTANCE: 16
       LOG_IPS: "true"
-      # TODO: Add Plugins here
+      # PLUGINS: "https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot,https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/spigot"
+      # MODRINTH_PROJECTS: "viaversion,discordsrv,essentialsx"
+      # MODRINTH_ALLOWED_VERSION_TYPE: "beta"
       OPS: "${OPS}"
       MOTD: "${MOTD}"
       ICON: /server-icon.png
@@ -32,21 +34,19 @@ services:
 
     labels:
     - "mc-router.host=${SERVER_URL}"
-    - "mc-router.auto-scale-down=true"
-    - "mc-router.scale-down-after=2h"
 
     networks:
       - mc-network
 
 
-  mc-folia-backup:
+  mc-fabric-backup:
     image: itzg/mc-backup
 
     depends_on:
-      - minecraft-folia-server
+      - minecraft-fabric-server
 
     environment:
-      RCON_HOST: "minecraft-folia-server"
+      RCON_HOST: "minecraft-fabric-server"
       RCON_PASSWORD: "${RCON_PASSWORD}"
       BACKUP_INTERVAL: "1h"
       PRUNE_BACKUPS_DAYS: 7

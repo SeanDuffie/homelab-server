@@ -199,13 +199,13 @@ def discordsrv(world_path: str = DEFAULT_PATH):
             key_to_set="PUBLIC_CHANNEL",
             value_to_set=public_channel
         )
-    admin_channel = os.getenv("ADMIN_CHANNEL")
-    if admin_channel is None:
-        admin_channel = input("Enter the Channel ID of the Admin Discord Channel: ")
+    global_channel = os.getenv("GLOBAL_CHANNEL")
+    if global_channel is None:
+        global_channel = input("Enter the Channel ID of the Admin Discord Channel: ")
         set_key(
             dotenv_path=ENV_DIR,
-            key_to_set="ADMIN_CHANNEL",
-            value_to_set=admin_channel
+            key_to_set="GLOBAL_CHANNEL",
+            value_to_set=global_channel
         )
     link_channel = os.getenv("LINK_CHANNEL")
     if link_channel is None:
@@ -284,7 +284,7 @@ def discordsrv(world_path: str = DEFAULT_PATH):
         config = yaml.safe_load(f)
         config["BotToken"] = discord_token
         config["Channels"] = {
-            "global": admin_channel,
+            "global": global_channel,
             "awards": public_channel,
             "deaths": public_channel,
             "join": public_channel,

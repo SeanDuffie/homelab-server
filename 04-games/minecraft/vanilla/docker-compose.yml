@@ -1,15 +1,21 @@
 services:
   minecraft-vanilla-server:
     image: itzg/minecraft-server
+    tty: true
+    stdin_open: true
     restart: unless-stopped
     environment:
       EULA: "TRUE"
       TYPE: "${SERVER_TYPE}"
       VERSION: "26.1.2"
+      # SEED: ""
       MEMORY: "4G"
-      MOTD: "${MOTD}"
       SIMULATION_DISTANCE: 16
+      LOG_IPS: "true"
       OPS: "${OPS}"
+      MOTD: "${MOTD}"
+      ICON: /server-icon.png
+      OVERRIDE_ICON: true
       ENABLE_RCON: "true"
       RCON_PASSWORD: "${RCON_PASSWORD}"
     env_file:
@@ -17,8 +23,11 @@ services:
     volumes:
       - ./data/world:/data
       - ./config:/config
+      - ./server-icon.png:/server-icon.png
     labels:
     - "mc-router.host=${SERVER_URL}"
+    - "mc-router.auto-scale-down=true"
+    - "mc-router.scale-down-after=2h"
     networks:
       - mc-network
 
@@ -31,6 +40,7 @@ services:
       RCON_PASSWORD: "${RCON_PASSWORD}"
       BACKUP_INTERVAL: "1h"
       PRUNE_BACKUPS_DAYS: 7
+      PAUSE_IF_NO_PLAYERS: "true"
     volumes:
       - ./data:/data:ro
       - ./backups:/backups
@@ -39,4 +49,4 @@ services:
 
 networks:
   mc-network:
-    name: mc-network
+    external: true

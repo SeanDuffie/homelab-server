@@ -1,0 +1,34 @@
+services:
+  minecraft-bedrock-server:
+    image: itzg/minecraft-bedrock-server
+    restart: unless-stopped
+
+    tty: true
+    stdin_open: true
+
+    environment:
+      EULA: "TRUE"
+      VERSION: "LATEST"
+
+      SERVER_NAME: "Docker Bedrock Server"
+      GAMEMODE: "survival"
+      DIFFICULTY: "hard"
+      ALLOW_CHEATS: "false"
+
+      WHITE_LIST: "true"
+
+    volumes:
+      - ./data:/data
+
+    labels:
+      - "mc-router.host=${SERVER_URL}"
+      - "mc-router.auto-scale-down=true"
+      - "mc-router.scale-down-after=2h"
+
+    networks:
+      - mc-network
+
+
+networks:
+  mc-network:
+    external: true
