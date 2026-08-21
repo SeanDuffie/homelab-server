@@ -39,7 +39,7 @@ services:
     container_name: lk-jwt-service
     restart: unless-stopped
     environment:
-      LIVEKIT_JWT_BIND: 8080
+      LIVEKIT_JWT_BIND: "0.0.0.0:8080"
       LIVEKIT_URL: ${LIVEKIT_URL}
       LIVEKIT_KEY: ${LIVEKIT_KEY}
       LIVEKIT_SECRET: ${LIVEKIT_SECRET}
