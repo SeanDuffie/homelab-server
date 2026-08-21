@@ -41,4 +41,4 @@ services:
 
 networks:
   homelab-proxy:
-    external: true
+    name: homelab-proxy
