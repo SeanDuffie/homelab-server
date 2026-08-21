@@ -1,6 +1,7 @@
 services:
-  minecraft-bedrock-server:
+  mc-bedrock-server:
     image: itzg/minecraft-bedrock-server
+    container_name: mc-bedrock-server
     restart: unless-stopped
 
     tty: true

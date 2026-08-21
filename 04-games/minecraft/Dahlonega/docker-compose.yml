@@ -1,7 +1,7 @@
 services:
-  mc-vanilla-server:
-    image: itzg/mc-server
-    container_name: mc-vanilla-server
+  mc-dahlonega-server:
+    image: itzg/minecraft-server
+    container_name: mc-dahlonega-server
     restart: unless-stopped
 
     tty: true
@@ -15,6 +15,9 @@ services:
       MEMORY: "4G"
       SIMULATION_DISTANCE: 16
       LOG_IPS: "true"
+      PLUGINS: "https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot,https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/spigot"
+      MODRINTH_PROJECTS: "viaversion,discordsrv,essentialsx"
+      MODRINTH_ALLOWED_VERSION_TYPE: "beta"
       OPS: "${OPS}"
       MOTD: "${MOTD}"
       ICON: /server-icon.png
@@ -39,16 +42,16 @@ services:
       - mc-network
 
 
-  mc-vanilla-backup:
+  mc-dahlonega-backup:
     image: itzg/mc-backup
-    container_name: mc-vanilla-backup
+    container_name: mc-dahlonega-backup
     restart: unless-stopped
 
     depends_on:
-      - mc-vanilla-server
+      - mc-dahlonega-server
 
     environment:
-      RCON_HOST: "mc-vanilla-server"
+      RCON_HOST: "mc-dahlonega-server"
       RCON_PASSWORD: "${RCON_PASSWORD}"
 
       RCON_RETRIES: "-1"

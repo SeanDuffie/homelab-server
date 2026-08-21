@@ -1,6 +1,7 @@
 services:
-  minecraft-forge-server:
+  mc-neoforge-server:
     image: itzg/minecraft-server
+    container_name: mc-neoforge-server
     restart: unless-stopped
 
     tty: true
@@ -45,16 +46,31 @@ services:
 
   mc-neoforge-backup:
     image: itzg/mc-backup
+    container_name: mc-neoforge-backup
+    restart: unless-stopped
 
     depends_on:
-      - minecraft-neoforge-server
+      - mc-neoforge-server
 
     environment:
-      RCON_HOST: "minecraft-neoforge-server"
+      RCON_HOST: "mc-neoforge-server"
       RCON_PASSWORD: "${RCON_PASSWORD}"
+
+      RCON_RETRIES: "-1"
+      RCON_RETRY_INTERVAL: "1m"
+      PAUSE_IF_NO_PLAYERS: "true"
+
+      BACKUP_METHOD: "restic"
+      RESTIC_PASSWORD: "${RESTIC_PASSWORD}"
+      RESTIC_REPOSITORY: "/backups"
       BACKUP_INTERVAL: "1h"
       PRUNE_BACKUPS_DAYS: 7
-      PAUSE_IF_NO_PLAYERS: "true"
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
     volumes:
       - ./data:/data:ro

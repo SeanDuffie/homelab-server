@@ -11,8 +11,8 @@ from dotenv import load_dotenv, set_key
 
 ### PATH SECTION ###
 # DEFAULT_PATH = os.path.join(os.path.dirname(__file__), "Worlds/Server")
-DEFAULT_PATH = os.path.join(os.path.dirname(__file__), "paper")
-WORLD_PATH = os.path.join(os.path.dirname(DEFAULT_PATH), "data/world/server")
+DEFAULT_PATH = os.path.dirname(__file__)
+WORLD_PATH = os.path.join(os.path.dirname(DEFAULT_PATH), "paper/data/world/server")
 
 ENV_DIR = os.path.join(DEFAULT_PATH, ".env")
 
@@ -96,7 +96,7 @@ def properties(world_path: str = DEFAULT_PATH, server_type: str = "vanilla"):
     # Modify the desired sections in the dictionary
     config_dict['difficulty'] = "hard"
     config_dict['enforce-secure-profile'] = False
-    config_dict['motd'] = "Welcome to the Reunion server!"
+    config_dict['motd'] = "Welcome to the server!"
     config_dict['previews-chat'] = True
     config_dict["simulation-distance"] = 32
     config_dict["view-distance"] = 32
@@ -392,7 +392,7 @@ if __name__ == "__main__":
     # Validation for environment file. If values don't exist, generate and save them!
     server_type = os.getenv("SERVER_TYPE")
     if server_type is None:
-        server_type = input("Enter the Server Type (vanilla, paper, forge, bedrock): ")
+        server_type = input("Enter the Server Type (vanilla, paper, folia, fabric, forge, neoforge, bedrock): ")
         set_key(
             dotenv_path=ENV_DIR,
             key_to_set="SERVER_TYPE",

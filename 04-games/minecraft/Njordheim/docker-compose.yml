@@ -1,7 +1,7 @@
 services:
-  mc-vanilla-server:
-    image: itzg/mc-server
-    container_name: mc-vanilla-server
+  mc-njordheim-server:
+    image: itzg/minecraft-server
+    container_name: mc-njordheim-server
     restart: unless-stopped
 
     tty: true
@@ -15,6 +15,9 @@ services:
       MEMORY: "4G"
       SIMULATION_DISTANCE: 16
       LOG_IPS: "true"
+      PLUGINS: "https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot,https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/spigot"
+      MODRINTH_PROJECTS: "viaversion,discordsrv,essentialsx"
+      MODRINTH_ALLOWED_VERSION_TYPE: "beta"
       OPS: "${OPS}"
       MOTD: "${MOTD}"
       ICON: /server-icon.png
@@ -32,23 +35,21 @@ services:
 
     labels:
     - "mc-router.host=${SERVER_URL}"
-    - "mc-router.auto-scale-down=true"
-    - "mc-router.scale-down-after=2h"
 
     networks:
       - mc-network
 
 
-  mc-vanilla-backup:
+  mc-njordheim-backup:
     image: itzg/mc-backup
-    container_name: mc-vanilla-backup
+    container_name: mc-njordheim-backup
     restart: unless-stopped
 
     depends_on:
-      - mc-vanilla-server
+      - mc-njordheim-server
 
     environment:
-      RCON_HOST: "mc-vanilla-server"
+      RCON_HOST: "mc-njordheim-server"
       RCON_PASSWORD: "${RCON_PASSWORD}"
 
       RCON_RETRIES: "-1"

@@ -1,7 +1,8 @@
 # master-compose.yml
 services:
-  minecraft-router:
+  mc-router:
     image: itzg/mc-router
+    container_name: mc-router
     restart: unless-stopped
 
     tty: true
