@@ -51,10 +51,15 @@ services:
     image: livekit/livekit-server:latest
     container_name: livekit
     restart: unless-stopped
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
     command: --config /etc/livekit.yaml
     ports:
       - "7880:7880"
       - "50100-50200:50100-50200/udp"
+    environment:
+      - "LIVEKIT_KEYS=${LIVEKIT_KEY}: ${LIVEKIT_SECRET}"
     volumes:
       - ./etc/livekit.yaml:/etc/livekit.yaml
     networks:
